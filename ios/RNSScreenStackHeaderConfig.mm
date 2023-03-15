@@ -585,9 +585,16 @@
         if ([subview.subviews[0] isKindOfClass:[RNSSearchBar class]]) {
 #if !TARGET_OS_TV
           if (@available(iOS 11.0, *)) {
-            RNSSearchBar *searchBar = subview.subviews[0];
-            navitem.searchController = searchBar.controller;
-            navitem.hidesSearchBarWhenScrolling = searchBar.hideWhenScrolling;
+              RNSSearchBar *searchBar = subview.subviews[0];
+              navitem.hidesSearchBarWhenScrolling = searchBar.hideWhenScrolling;
+
+              if (searchBar.hideTitle) {
+                [navitem.searchController.searchBar sizeToFit];
+                navitem.titleView = searchBar.controller.searchBar;
+                searchBar.controller.hidesNavigationBarDuringPresentation = false;
+              } else {
+                navitem.searchController = searchBar.controller;
+              }
           }
 #endif
         }
